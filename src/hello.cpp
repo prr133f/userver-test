@@ -3,6 +3,8 @@
 #include <fmt/format.h>
 
 #include <userver/server/handlers/http_handler_base.hpp>
+#include <userver/clients/dns/component.hpp>
+#include <userver/components/component_list.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 
@@ -26,8 +28,6 @@ namespace service_template
                     .FindComponent<userver::components::Postgres>("postgres-db-1")
                     .GetCluster()) {}
 
-      using HttpHandlerBase::HttpHandlerBase;
-
       std::string HandleRequestThrow(
           const userver::server::http::HttpRequest &request,
           userver::server::request::RequestContext &) const override
@@ -50,8 +50,7 @@ namespace service_template
             user_type = UserType::kKnown;
           }
         }
-
-        return service_template::SayHelloTo(name, user_type)
+        return service_template::SayHelloTo(name, user_type);
       }
 
       userver::storages::postgres::ClusterPtr pg_cluster_;
@@ -77,16 +76,11 @@ namespace service_template
     UASSERT(false);
   }
 
-  void AppendHello(userver::components::ComponentList &component_list)
+  void AppendHello(userver::components::ComponentList &components_list)
   {
-    component_list.Append<Hello>();
+    components_list.Append<Hello>();
+    components_list.Append<userver::components::Postgres>("postgres-db-1");
+    components_list.Append<userver::clients::dns::Component>();
   }
 
 } // namespace service_template
-
-void AppendHello(userver::components::ComponentList &components_list)
-{
-  components_list.Append<Hello>();
-  components_list.Append<userver::components::Postgres>("postgres-db-1");
-  components_list.Append<userver::clients::dns::Component>();
-}
