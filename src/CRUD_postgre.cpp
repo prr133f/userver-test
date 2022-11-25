@@ -1,5 +1,4 @@
 #include "CRUD_postgre.hpp"
-#include <postgresql/internal/libpq-int.h>
 #include "models/pg_schema.hpp"
 #include "sql/sql_queries.hpp"
 #include "userver/components/component_context.hpp"
