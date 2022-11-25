@@ -18,29 +18,28 @@ std::string crud_postgre::Handler::HandleRequestThrow(
     case userver::server::http::HttpMethod::kGet: {
       auto result = pg_cluster_->Execute(
           userver::storages::postgres::ClusterHostType::kMaster,
-          queries::get_query, request.GetArg("db-name"));
+          queries::get_query, request.GetArg("name"));
       return Models::ToString(result.AsSingleRow<Models::pg_schema>(
           userver::storages::postgres::kRowTag));
     }
     case userver::server::http::HttpMethod::kPost: {
       auto result = pg_cluster_->Execute(
           userver::storages::postgres::ClusterHostType::kMaster,
-          queries::post_query, request.GetArg("db-name"),
-          request.GetArg("name"), request.GetArg("count"));
+          queries::post_query, request.GetArg("name"),
+          std::stoi(request.GetArg("count")));
       return std::to_string(result.RowsAffected());
     }
     case userver::server::http::HttpMethod::kPut: {
       auto result = pg_cluster_->Execute(
           userver::storages::postgres::ClusterHostType::kMaster,
-          queries::put_query, request.GetArg("db-name"),
-          request.GetArg("new-count"), request.GetArg("name"));
+          queries::put_query, std::stoi(request.GetArg("new-count")),
+          request.GetArg("name"));
       return std::to_string(result.RowsAffected());
     }
     case userver::server::http::HttpMethod::kDelete: {
       auto result = pg_cluster_->Execute(
           userver::storages::postgres::ClusterHostType::kMaster,
-          queries::delete_query, request.GetArg("db-name"),
-          request.GetArg("name"));
+          queries::delete_query, request.GetArg("name"));
       return std::to_string(result.RowsAffected());
     }
     default:

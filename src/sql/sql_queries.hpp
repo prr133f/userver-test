@@ -3,7 +3,7 @@
 #include "userver/storages/postgres/query.hpp"
 namespace queries {
 const userver::storages::postgres::Query get_query{
-    "SELECT * FROM hello_schema.users",
+    "SELECT * FROM hello_schema.users WHERE name=$1",
     userver::storages::postgres::Query::Name{"get_query"}};
 
 const userver::storages::postgres::Query post_query{
