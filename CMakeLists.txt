@@ -11,6 +11,10 @@ add_subdirectory(third_party/userver)
 add_library(${PROJECT_NAME}_objs OBJECT
     src/hello.hpp
     src/hello.cpp
+	src/models/pg_schema.hpp
+	src/CRUD_postgre.cpp
+	src/CRUD_postgre.hpp
+	src/sql/sql_queries.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
 
